@@ -115,13 +115,11 @@ async def predict(text: str, owner: str = Depends(conditional_auth)):
     # Verifica se collection existe
     if collection is not None:
       try:
-        collection.insert_one(results)
-        results['id'] = str(results['_id'])
-        results.pop('_id')
+          inserted = collection.insert_one(results)
+          results['id'] = str(inserted.inserted_id)
       except Exception as e:
-            logger.error(f"Failed to persist prediction in DB: {e}")
-            # não falhar a API por conta de persistência
-            results['id'] = None
+          logger.error(f"Failed to persist prediction in DB: {e}")
+          results['id'] = None
     else:
         results['id'] = None
 
