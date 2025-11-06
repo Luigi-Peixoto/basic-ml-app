@@ -40,14 +40,12 @@ jobs:
       # 4. Executa os testes com pytest (com o report -rA)
       - name: Rodar testes com pytest
         env:
-          # Carrega as secrets como variáveis de ambiente para os testes
           MONGO_URI: ${{ secrets.MONGO_URI }}
-          MONGO_DB: ${{ secrets.MONGO_DB }}
+          MONGO_DB: ${{ secrets.MONGO_DB }} # <-- ADICIONE ESTA LINHA
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
           WANDB_MODEL_URL: ${{ secrets.WANDB_MODEL_URL }}
           WANDB_PROJECT: ${{ secrets.WANDB_PROJECT }}
         run: python -m pytest -rA
-
       # 7. Constroi a imagem Docker para validar o Dockerfile
       - name: Construir imagem Docker
         run: docker build -t intent-clf:latest -f app/app.Dockerfile .

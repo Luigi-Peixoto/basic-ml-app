@@ -3,7 +3,8 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock, patch
 from pymongo.errors import ConnectionFailure
-from db.engine import get_mongo_collection # <-- IMPORTANTE: Adicionado para a limpeza
+from db.engine import get_mongo_collection
+from bson.objectid import ObjectId
 
 # --- Configuração Inicial ---
 # IMPORTANTE: Definimos as variáveis de ambiente ANTES de importar o 'app'
@@ -116,10 +117,13 @@ def test_predict_integration_db_success(client, mock_ml_model):
     mock_ml_model.predict.assert_called_with("teste integracao")
     
     # 3. Verifica no Banco de Dados REAL (de teste)
-    db_entry = collection.find_one({"text": "teste integracao"})
-    
-    assert db_entry is not None
-    assert str(db_entry["_id"]) == data["id"] # Agora deve funcionar
+    assert data["id"] is not None # Garante que a API retornou um ID
+
+    # Busca o documento no banco usando o ObjectId exato
+    db_entry = collection.find_one({"_id": ObjectId(data["id"])})
+
+    assert db_entry is not None # Verifica se o ID realmente existe no banco
+    assert db_entry["text"] == "teste integracao"
     assert db_entry["owner"] == "dev_user"
 
 ### 3. Testes de Falha (Identificando Erros - Item c)
