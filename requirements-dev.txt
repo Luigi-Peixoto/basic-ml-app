@@ -1,0 +1,7 @@
+# Instala todas as dependências de produção
+-r requirements.txt
+
+# Adiciona as dependências específicas de teste
+pytest
+pytest-cov
+httpx
