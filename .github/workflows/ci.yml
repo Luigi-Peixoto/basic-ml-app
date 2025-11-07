@@ -41,7 +41,7 @@ jobs:
       - name: Rodar testes com pytest
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-          MONGO_DB: ${{ secrets.MONGO_DB }} # <-- ADICIONE ESTA LINHA
+          MONGO_DB: ${{ secrets.MONGO_DB }}
           WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
           WANDB_MODEL_URL: ${{ secrets.WANDB_MODEL_URL }}
           WANDB_PROJECT: ${{ secrets.WANDB_PROJECT }}

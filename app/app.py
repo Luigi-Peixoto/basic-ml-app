@@ -73,7 +73,6 @@ async def conditional_auth(request: Request):
 MODELS = {}
 try:
     logger.info("Loading confusion model...")
-    # Load all the .keras files in the intent_classifier/models folder
     model_files = [f for f in os.listdir(os.path.join(os.path.dirname(__file__), "..", "intent_classifier", "models")) if f.endswith(".keras")]
     for model_file in model_files:
         model_path = os.path.join(os.path.dirname(__file__), "..", "intent_classifier", "models", model_file)
@@ -96,7 +95,6 @@ async def root():
 
 @app.post("/predict")
 async def predict(text: str, owner: str = Depends(conditional_auth)):
-    # Generate predictions
     predictions = {}
     for model_name, model in MODELS.items():
         top_intent, all_probs = model.predict(text)
@@ -112,15 +110,13 @@ async def predict(text: str, owner: str = Depends(conditional_auth)):
         "timestamp": int(datetime.now(timezone.utc).timestamp())
     }
 
-    # Verifica se collection existe
     if collection is not None:
       try:
         collection.insert_one(results)
         results['id'] = str(results['_id'])
-        results.pop('_id')  # <-- ESTA É A LINHA CORRETA!
+        results.pop('_id')
       except Exception as e:
             logger.error(f"Failed to persist prediction in DB: {e}")
-            # não falhar a API por conta de persistência
             results['id'] = None
     else:
         results['id'] = None

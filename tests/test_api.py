@@ -49,10 +49,9 @@ def mock_ml_model(monkeypatch):
     """
     mock_model_instance = MagicMock()
     mock_model_instance.predict.return_value = (
-        "intent_mock_v1",  # top_intent
-        {"intent_mock_v1": 1.0, "outra_intent": 0.0} # all_probs
+        "intent_mock_v1", 
+        {"intent_mock_v1": 1.0, "outra_intent": 0.0}
     )
-    # Substitui a variável global 'MODELS' no módulo 'app.app'
     monkeypatch.setattr("app.app.MODELS", {"mock_classifier": mock_model_instance})
     yield mock_model_instance
 
@@ -62,12 +61,10 @@ def mock_db_collection(monkeypatch):
     Fixture para Testes de Unidade: Simula a coleção do MongoDB.
     """
     mock_coll = MagicMock()
-    # Substitui a variável global 'collection' no módulo 'app.app'
     monkeypatch.setattr("app.app.collection", mock_coll)
     yield mock_coll
 
 
-# --- Testes ---
 
 ### 1. Testes de Sanidade e Unidade (Mocando o BD)
 
@@ -135,14 +132,10 @@ def test_auth_prod_missing_token(client, monkeypatch):
     """
     monkeypatch.setattr("app.app.ENV", "prod")
     response = client.post("/predict?text=teste sem token")
-    
-    # CORREÇÃO: O app.py tem um 'except' genérico que captura
-    # a exceção de 'Missing Authorization header' e retorna 'Authentication failed'.
-    # O teste deve verificar o comportamento REAL do app (que está "errado").
+  
     assert response.status_code == 401
     assert response.json()["detail"] == "Authentication failed"
     
-    # CORREÇÃO: Restaura o ENV para 'dev'
     monkeypatch.setattr("app.app.ENV", "dev")
 
 @patch("app.auth.get_mongo_collection")
@@ -157,10 +150,7 @@ def test_auth_prod_invalid_token(mock_get_auth_db, client, monkeypatch):
     headers = {"Authorization": "Bearer token_falso_123"}
     response = client.post("/predict?text=teste token invalido", headers=headers)
     
-    # CORREÇÃO: Mesmo motivo do teste anterior. O app.py
-    # captura a exceção 403 e a transforma em 401.
     assert response.status_code == 401
     assert response.json()["detail"] == "Authentication failed"
     
-    # CORREÇÃO: Restaura o ENV para 'dev'
     monkeypatch.setattr("app.app.ENV", "dev")
