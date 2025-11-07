@@ -8,7 +8,7 @@ import logging
 from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-
+from fastapi import Request 
 from intent_classifier import IntentClassifier
 from db.engine import get_mongo_collection
 from app.auth import verify_token
@@ -21,6 +21,7 @@ load_dotenv()
 # Read environment mode (defaults to prod for safety)
 ENV = os.getenv("ENV", "prod").lower()
 logger.info(f"Running in {ENV} mode")
+collection = None
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -49,11 +50,12 @@ try:
     collection = get_mongo_collection(f"{ENV.upper()}_intent_logs")
     logger.info("Database connection established")
 except Exception as e:
+    collection = None
     logger.error(f"Failed to connect to database: {str(e)}")
     logger.error(traceback.format_exc())
 
 
-async def conditional_auth():
+async def conditional_auth(request: Request):
     """Returns user based on environment mode"""
     global ENV
     if ENV == "dev":
@@ -61,7 +63,7 @@ async def conditional_auth():
         return "dev_user"
     else:
         try:
-            return await verify_token()
+            return verify_token(request)
         except Exception as e:
             logger.error(f"Authentication failed: {str(e)}")
             raise HTTPException(status_code=401, detail="Authentication failed")
@@ -71,7 +73,6 @@ async def conditional_auth():
 MODELS = {}
 try:
     logger.info("Loading confusion model...")
-    # Load all the .keras files in the intent_classifier/models folder
     model_files = [f for f in os.listdir(os.path.join(os.path.dirname(__file__), "..", "intent_classifier", "models")) if f.endswith(".keras")]
     for model_file in model_files:
         model_path = os.path.join(os.path.dirname(__file__), "..", "intent_classifier", "models", model_file)
@@ -89,12 +90,11 @@ Routes
 
 @app.get("/")
 async def root():
-    return {"message": "Basic ML App is running in {ENV} mode"}
+    return {"message": f"Basic ML App is running in {ENV} mode"}
 
 
 @app.post("/predict")
 async def predict(text: str, owner: str = Depends(conditional_auth)):
-    # Generate predictions
     predictions = {}
     for model_name, model in MODELS.items():
         top_intent, all_probs = model.predict(text)
@@ -109,10 +109,17 @@ async def predict(text: str, owner: str = Depends(conditional_auth)):
         "predictions": predictions, 
         "timestamp": int(datetime.now(timezone.utc).timestamp())
     }
-    
-    collection.insert_one(results)
-    results['id'] = str(results['_id'])
-    results.pop('_id')
+
+    if collection is not None:
+      try:
+        collection.insert_one(results)
+        results['id'] = str(results['_id'])
+        results.pop('_id')
+      except Exception as e:
+            logger.error(f"Failed to persist prediction in DB: {e}")
+            results['id'] = None
+    else:
+        results['id'] = None
 
     return JSONResponse(content=results)
 
