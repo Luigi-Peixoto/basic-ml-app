@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: app/app.Dockerfile
-      container_name: intent-clf-container
+    container_name: basic-ml-app
     ports:
       - "8000:8000"
     env_file: .env

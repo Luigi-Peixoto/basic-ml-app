@@ -1,10 +1,10 @@
 """
 
 # Criar um novo token
-python db/tokens.py create --owner="alguem" --expires_in_days=365
+python db/auth.py create --owner="alguem" --expires_in_days=365
 
 # Ler todos os tokens
-python db/tokens.py read_all
+python db/auth.py read_all
 
 """
 
@@ -12,7 +12,11 @@ import uuid
 from datetime import datetime, timedelta
 from db.engine import get_mongo_collection
 from fastapi import Request, HTTPException
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+ENV = os.getenv("ENV", "prod").lower()
 
 class TokenManager:
     """
@@ -86,6 +90,22 @@ def verify_token(request: Request):
     return token_entry["owner"]
 
 
+async def conditional_auth(request: Request):
+    """
+    Retorna o 'owner' baseado no modo do ambiente (dev ou prod).
+    Esta função agora é o 'Depends' principal para as rotas.
+    """
+    if ENV == "dev":
+        return "dev_user"
+    else:
+        try:
+            return verify_token(request)
+        except HTTPException as he:
+            raise he
+        except Exception as e:
+            raise HTTPException(status_code=401, detail="Authentication failed")
+
+            
 if __name__ == "__main__":
     import fire
     fire.Fire(TokenManager)

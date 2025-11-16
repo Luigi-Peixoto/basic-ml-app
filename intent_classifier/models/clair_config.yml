@@ -1,0 +1,22 @@
+architecture: v0.1.5
+callback_patience: 200
+codes:
+- ask_content
+- ask_support
+- how_are_you
+- normal_response
+- ping
+- response_refusal
+- who_are_you
+dataset_name: clair
+embedding_model: https://tfhub.dev/google/universal-sentence-encoder-multilingual/3
+epochs: 1000
+l1_reg: 0.01
+l2_reg: 0.01
+learning_rate: 0.0005
+min_words: 1
+sent_dropout: 0.2
+sent_hl_units: 14
+stop_words_file: null
+task: train
+validation_split: 0.1

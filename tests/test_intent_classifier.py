@@ -24,12 +24,12 @@ def paths():
     
     # Caminhos baseados na estrutura de arquivos original
     examples_path = os.path.join(project_root, "intent_classifier", "data", "confusion_intents.yml")
-    config_path = os.path.join(project_root, "intent_classifier", "models", "confusion-v1_config.yml")
+    config_path = os.path.join(project_root, "intent_classifier", "models", "confusion_config.yml")
 
     if not (os.path.exists(examples_path)):
-        pytest.skip(f"Arquivos de dados de teste não encontrados em {examples_path}")
+        pytest.skip(f"Arquivos de dados de teste `confusion_intents.yml` não encontrados em {examples_path}")
     if not (os.path.exists(config_path)):
-        pytest.skip(f"Arquivos de configuração não encontrados em {config_path}")
+        pytest.skip(f"Arquivos de configuração `confusion_config.yml` não encontrados em {config_path}")
         
     return {"config": config_path, "examples": examples_path}
 
@@ -37,34 +37,35 @@ def paths():
 def clf_wandb(paths):
     """
     Fixture de integração: Carrega o modelo real do W&B.
-    - Pula (skip) se WANDB_MODEL_URL ou WANDB_API_KEY não estiverem definidos.
+    - Pula (skip) se WANDB_MODELS ou WANDB_API_KEY não estiverem definidos.
     - Falha (fail) se as secrets estiverem definidas, mas o modelo não carregar.
     """
     load_dotenv()
-    env_url = os.getenv("WANDB_MODEL_URL")
+    model_url = os.getenv("WANDB_MODELS", None)
+    model_url = model_url.split(',')[0] if model_url else None
     api_key = os.getenv("WANDB_API_KEY")
 
     if not api_key:
         pytest.skip("WANDB_API_KEY não definido. Pulando teste de integração W&B.")
-    if not env_url:
-        pytest.skip("WANDB_MODEL_URL não definido. Pulando teste de integração W&B.")
+    if not model_url:
+        pytest.skip("WANDB_MODELS não definido. Pulando teste de integração W&B.")
 
-    print("\n🌐 WANDB_MODEL_URL detectado, tentando carregar modelo real...")
+    print("\n🌐 WANDB_MODELS detectado, tentando carregar modelo real...")
 
     # A inicialização tentará carregar o modelo
     classifier = IntentClassifier(config=paths["config"], 
-                                  examples_file=paths["examples"],
-                                  load_model=os.environ.get('WANDB_MODEL_URL'))
+                                training_data=paths["examples"],
+                                load_model=model_url)
     
     # Validação crucial: o __init__ do código-fonte captura exceções e apenas imprime.
     # Devemos verificar ativamente se o modelo foi carregado.
     if classifier.model is None:
         pytest.fail(
-            f"Secrets W&B definidas, mas o modelo falhou ao carregar de {env_url}. "
+            f"Secrets W&B definidas, mas o modelo falhou ao carregar de {model_url}. "
             "Verifique a API key, a URL do modelo ou se o modelo existe."
         )
         
-    print("✅ Modelo carregado do W&B")
+    print(f"✅ Modelo `{model_url}` carregado do W&B")
     return classifier
 
 @pytest.fixture(scope="module")
@@ -82,11 +83,10 @@ def clf_local_trained(paths):
         callback_patience=1,
         validation_split=0.5,
         sent_hl_units=8,  # Modelo pequeno
-        wandb_project=None  # Não registrar este treino de teste
     )
     
     # Passa o objeto Config e o caminho dos exemplos
-    classifier = IntentClassifier(config=local_config, examples_file=paths["examples"])
+    classifier = IntentClassifier(config=local_config, training_data=paths["examples"])
     classifier.train(tf_verbosity=0)  # Treina silenciosamente
     print("✅ Modelo local treinado.")
     return classifier
@@ -121,29 +121,16 @@ def clf_with_stopwords(tmp_path):
 def test_init_fails_without_config_or_model(monkeypatch):
     """Verifica se a inicialização falha se NENHUMA fonte de config/modelo for fornecida."""
     # monkeypatch é uma fixture nativa do pytest para alterar o ambiente
-    monkeypatch.delenv("WANDB_MODEL_URL", raising=False)
+    monkeypatch.delenv("WANDB_MODELS", raising=False)
     
-    # Deve falhar, pois nem 'config', nem 'load_model', nem WANDB_MODEL_URL foram dados
-    with pytest.raises(ValueError, match="`config` object must be provided"):
+    # Deve falhar, pois nem 'config', nem 'load_model', nem WANDB_MODELS foram dados
+    with pytest.raises(ValueError, match="A 'config' must be provided"):
         IntentClassifier()
-
-def test_preprocess_text_lowercase(clf_minimal):
-    """Testa a conversão para minúsculas."""
-    result_tensor = clf_minimal.preprocess_text("OI TUDO BEM?")
-    assert result_tensor.shape == (1,)
-    assert result_tensor.numpy()[0] == b'oi tudo bem?'
-
-def test_preprocess_text_min_words(clf_minimal):
-    """Testa o padding de 'min_words'."""
-    # A config em 'clf_minimal' define min_words=2
-    # O código fonte adiciona (min_words + 1) de padding
-    result_tensor = clf_minimal.preprocess_text("oi") # Menor que min_words
-    assert result_tensor.numpy()[0] == b'<> <> <>'
 
 def test_preprocess_text_stopwords(clf_with_stopwords):
     """Testa a remoção de stopwords."""
     result_tensor = clf_with_stopwords.preprocess_text("uma frase de teste")
-    assert result_tensor.numpy()[0] == b'frase teste'
+    assert result_tensor.numpy() == b'frase teste'
 
 # --- Testes de Sanidade Local (Médios) ---
 

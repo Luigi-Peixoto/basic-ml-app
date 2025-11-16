@@ -16,4 +16,3 @@ sent_hl_units: 64
 stop_words_file: null
 task: train
 validation_split: 0.1
-wandb_project: intent_classifier

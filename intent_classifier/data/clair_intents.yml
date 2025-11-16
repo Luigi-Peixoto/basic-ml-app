@@ -2,13 +2,13 @@
   examples:
     - clair are you there?
     - clair?
-    - claire?
+    - clair?
     - has anyone done something to clair?
     - have you seen clair?
     - is clair here?
-    - claire, can you hear me?
+    - clair, can you hear me?
     - clair, are you online?
-    - is claire still working?
+    - is clair still working?
 
 - intent: how_are_you
   examples:
@@ -16,7 +16,7 @@
     - Clair what's up?
     - clair how was your day?
     - are you ok clair?
-    - claire, how are you?
+    - clair, how are you?
     - how's it going, clair?
     - clair, everything okay with you?
 
@@ -25,12 +25,12 @@
     - clair what do you do?
     - clair who are you?
     - what can you do clair?
-    - claire, what are your capabilities?
-    - what's your purpose, claire?
+    - clair, what are your capabilities?
+    - what's your purpose, clair?
     - clair, tell me about yourself
-    - claire, what kind of AI are you?
+    - clair, what kind of AI are you?
     - what are your main functions, clair?
-    - claire, how would you describe yourself?
+    - clair, how would you describe yourself?
 
 - intent: ask_support
   examples:
@@ -41,12 +41,12 @@
     - clair help us!!
     - clair do something
     - clair say something
-    - claire, can you assist with this problem?
+    - clair, can you assist with this problem?
     - we need your advice, clair
-    - claire, what's your opinion on this?
+    - clair, what's your opinion on this?
     - clair, how would you approach this situation?
-    - can you guide us through this, claire?
-    - claire, we're stuck. Any suggestions?
+    - can you guide us through this, clair?
+    - clair, we're stuck. Any suggestions?
     - clair, what's the best course of action here?
 
 - intent: ask_content
@@ -59,13 +59,13 @@
     - clair how can I do this?
     - clair could you explain this to me?
     - clair ask me a question
-    - claire, can you define this term?
+    - clair, can you define this term?
     - what's the significance of this, clair?
-    - claire, how does this work?
+    - clair, how does this work?
     - clair, can you give an example of this?
-    - claire, what are the key points to remember?
+    - clair, what are the key points to remember?
     - clair, how is this applied in real life?
-    - claire, can you break this down for me?
+    - clair, can you break this down for me?
 
 - intent: response_refusal
   examples:
@@ -77,13 +77,13 @@
     - clair we dont need you
     - no clair I dont know how
     - no clair I dont know other way to put this
-    - claire, I'm not interested in this
+    - clair, I'm not interested in this
     - that's enough, clair
-    - claire, let's move on from this topic
+    - clair, let's move on from this topic
     - I don't want to discuss this further, clair
-    - claire, your suggestions aren't helpful right now
+    - clair, your suggestions aren't helpful right now
     - clair, I'd rather not continue this conversation
-    - claire, can we talk about something else?
+    - clair, can we talk about something else?
 
 - intent: normal_response
   examples:

@@ -1,0 +1,201 @@
+- intent: confusion
+  examples:
+    - wait what?
+    - huh?
+    - There is nothing here
+    - Oh wait, what?
+    - I don't know
+    - I'm so lost right now
+    - wait I don't get it
+    - what's going on?
+    - hold on, what?
+    - um... I'm not following
+    - I'm kinda confused
+    - what are we doing again?
+    - sorry, I'm a bit lost
+    - hang on, I'm confused
+    - I can't figure it out
+    - What is that?
+    - How that affects it?
+    - I have no idea what's happening
+    - wait, can you say that again?
+    - I'm not sure what we're doing
+    - what do you mean by that?
+    - I'm totally blanking
+    - wait, how does this work?
+    - I'm not really getting this
+    - what are we supposed to do?
+    - um... what?
+    - can someone explain what's going on?
+    - I think I'm missing something
+    - hold up, I'm lost
+    - this isn't making sense to me
+    - are we supposed to know this?
+    - I'm kind of stuck here
+    - wait, where are we?
+    - how does this even work?
+    - I'm not following at all
+    - How do we solve this problem?
+    - Where can I find this?
+    - Which method should we use here?
+    - Can you explain the steps again?
+    - What does this symbol mean?
+    - Where should we start?
+    - What's the difference between these?
+    - How do these parts connect?
+    - What are the key components?
+    - What happens if we change this variable?
+    - How does this relate to the previous topic?
+    - What tools do we need for this?
+    - Why do we use this method?
+    - What's the purpose?
+    - How will this be applied?
+    - What are the requirements for this task?
+    - Can you explain why?
+    - Changes, why?
+    - What, all of a sudden?
+    - What was that?
+    - Is that the task?
+    - That changed, why?
+    - What happened?
+    - What did you do?
+    - Where did you get that?
+    - Well, what was that instruction?
+    - Then what?
+    - Did it take something to write?
+    - What's the matter?
+    - How does that affect it?
+    - Should we go straight or go somewhere?
+    - But is it the same?
+    - If its not the same then what can we say about it?
+    - Is there more?
+
+- intent: certainty
+  examples:
+    - I know
+    - I am sure it's there
+    - It's going to be that
+    - That is why it's changing
+    - Put this here and that there
+    - This is definitely correct
+    - I know exactly how to do this
+    - I've got this figured out
+    - There's no doubt in my mind
+    - I'm certain this is the right answer
+    - I understand this perfectly
+    - This makes complete sense to me
+    - I'm confident in my solution
+    - I know this like the back of my hand
+    - This is exactly right
+    - I've mastered this concept
+    - I can explain this to anyone
+    - I'm 100% sure about this
+    - This is crystal clear to me
+    - I've got a solid understanding of this
+    - There's no question about it
+    - I know what I'm doing here
+    - This is absolutely correct
+    - I'm positive this is right
+    - I've got this down pat
+    - This is definitely the way to do it
+    - I understand this thoroughly
+    - I'm completely sure about this
+    - This is undoubtedly correct
+    - about 13 meters per second at its maximum.
+    - You're such a loser.
+
+- intent: neutral_statement
+  examples:
+    - Yes
+    - No
+    - Oh my god
+    - This?
+    - It is random
+    - That is the same
+    - It stays the same
+    - It changes
+    - I mean, it's not like that
+    - There is nothing here
+    - It is the same
+    - It is not the same
+    - No need for this
+    - How much?
+    - It can't be too late
+    - I'm sorry about that
+    - Bitterness
+    - That isn't gonna stay in place enough
+    - Alright, let's see what happens
+    - I'm not going to
+    - We should continue with the next part
+    - Let's look at this example
+    - I'm working on it now
+    - That's what we discussed earlier
+    - We covered this last week
+    - The answer is in the textbook
+    - I'll check my notes
+    - But if that is gone, we can do that
+    - it's not really that way when it is changing 
+    - This reminds me of something
+    - We're almost finished
+    - Do you want to do this?
+    - Would you like that?
+    - What else?
+    - That's interesting, isn't it?
+    - You might be onto something there, right?
+    - Wouldn't that be the same as before?
+    - I suppose that could work?
+    - That's just how it is, isn't it?
+    - What's the formula for this equation?
+    - When is the assignment due?
+    - Can you show an example?
+    - Maybe we should try another approach?
+    - I'm just thinking out loud here
+    - The weather is nice today
+    - We need to submit this soon
+    - I'll get started on this
+    - That's what the book says
+    - Let's move on to the next topic
+    - I wrote down the main points
+    - We can discuss this later
+    - The class is almost over
+    - I brought my materials
+    - This seems familiar
+    - That's what I thought too
+    - We're making progress
+    - The deadline is approaching
+    - I'll review this at home
+    - That's a different perspective, right?
+    - Shouldn't we consider all options?
+    - Wonder if that makes a difference?
+    - Could be worth trying, don't you think?
+    - That's just how science works, isn't it?
+    - The answer might be simpler than we think?
+    - I'm just following the instructions
+    - We'll finish this tomorrow
+    - The group project is coming along
+    - I've added my part to the presentation
+    - Let's take a short break
+    - The experiment is running
+    - We should document our findings
+    - That's what the data shows
+    - I'm taking notes
+    - The results are interesting
+    - We're on schedule
+    - This matches our hypothesis
+    - The procedure is straightforward
+    - That's what we predicted
+    - I'm still on the wrong question.
+    - There's nothing in here.
+    - Now I'm not getting this skater off tonight.
+    - Not here, not here.
+    - we'll see how it changes.
+    - There's these white dots...
+    - What's the matter?
+    - Is it here?
+    - I'm not going to lie.
+    - To the left of the box
+    - Let's put it down, put it in there
+    - Hey, don't be so confused
+    - because then it will happen again
+    - Well, it wasn't...
+    - That is not what happens 

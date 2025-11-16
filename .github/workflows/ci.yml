@@ -18,6 +18,14 @@ jobs:
     # O tipo de máquina virtual para rodar o job
     runs-on: ubuntu-latest
 
+    # Segredos viram variáveis de ambiente que o docker-compose consome
+    env:
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      MONGO_DB: ${{ secrets.MONGO_DB }}
+      WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+      WANDB_MODELS: ${{ secrets.WANDB_MODELS }}
+      ENV: dev
+
     # Passos sequenciais que o job executará
     steps:
       # 1. Faz o checkout do código do repositório para a máquina virtual
